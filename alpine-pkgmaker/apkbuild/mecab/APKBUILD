@@ -1,0 +1,32 @@
+# Contributor:
+# Maintainer:
+pkgname=mecab
+pkgver=0.996
+pkgrel=0
+pkgdesc="mecab for alpine"
+url="http://taku910.github.io/mecab/"
+arch="x86_64"
+license="GPL"
+depends="openssl"
+makedepends="curl git bash file sudo openssh autoconf automake texinfo alpine-sdk"
+install=""
+subpackages="$pkgname-dev $pkgname-doc"
+mecab_url="https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE"
+builddir="$srcdir/"
+
+prepare() {
+	cd "$builddir"
+	curl -SL -o mecab-${pkgver}.tar.gz ${mecab_url}
+	tar zxf mecab-${pkgver}.tar.gz
+}
+build() {
+	cd "$builddir"mecab-${pkgver}
+	./configure --prefix=/usr --enable-utf8-only --with-charset=utf8 || return 1
+	make || return 1
+}
+
+package() {
+	cd "$builddir"/mecab-${pkgver}
+	make DESTDIR="$pkgdir" install || return 1
+}
+

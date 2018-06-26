@@ -1,0 +1,33 @@
+# Contributor:
+# Maintainer:
+pkgname=mecab-ipadic
+pkgver=2.7.0
+_pkgver=2.7.0-20070801
+pkgrel=0
+pkgdesc="mecab-ipadic for alpine"
+url="http://taku910.github.io/mecab/"
+arch="x86_64"
+license="GPL"
+depends="mecab"
+makedepends="curl alpine-sdk mecab-dev"
+install=""
+subpackages=""
+ipadic_url="https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM"
+builddir="$srcdir/"
+
+prepare() {
+	cd "$builddir"
+	curl -SL -o mecab-ipadic-${_pkgver}.tar.gz ${ipadic_url}
+	tar zxf mecab-ipadic-${_pkgver}.tar.gz
+}
+build() {
+	cd "$builddir"mecab-ipadic-${_pkgver}
+	./configure --prefix=/usr --with-charset=utf8 || return 1
+	make || return 1
+}
+
+package() {
+	cd "$builddir"/mecab-ipadic-${_pkgver}
+	make DESTDIR="$pkgdir" install || return 1
+}
+
