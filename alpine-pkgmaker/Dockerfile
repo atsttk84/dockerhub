@@ -15,6 +15,7 @@ RUN ln -sf /usr/bin/nvim /usr/bin/vi
 
 WORKDIR /root
 COPY conf/.zshrc /root
+COPY conf/.zshrc /home/alpine
 
 WORKDIR /home/alpine
 COPY apkbuild /home/alpine/apkbuild
@@ -28,4 +29,6 @@ USER alpine
 WORKDIR /home/alpine/apkbuild/mecab-ipadic
 RUN abuild check && abuild -r 
 
+USER alpine
+WORKDIR /home/alpine
 CMD /bin/zsh -l
